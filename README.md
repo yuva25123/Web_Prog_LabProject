@@ -59,4 +59,21 @@ Thus, the required web pages including a form page and other web pages using HTM
 ---
 
 ## Repository Structure
+labzero_FORM
+│
+├── labzero_form.html
+├── program1_college_info.html
+├── program2_image_map.html
+├── program3_table_meter_progress.html
+├── program4_faq_dialog.html
+├── program5_multimedia_ruby.html
+├── Lab0_Experiment.docx
+└── README.md
+
+
+---
+
+## Conclusion
+
+This experiment helped in understanding the fundamentals of web page creation using HTML and CSS, along with basic JavaScript for validation and interaction.
 
