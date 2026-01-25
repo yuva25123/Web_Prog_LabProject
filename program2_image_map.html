@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Map Demo</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    figure { border: 1px solid #ddd; padding: 10px; border-radius: 8px; max-width: 520px; }
+    figcaption { margin-top: 8px; font-size: 14px; }
+    .hint { color: #555; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Campus Map (Image Map)</h1>
+  <p class="hint">Click different regions (rect/circle/poly). Default area links to home.</p>
+</header>
+
+<main>
+  <figure>
+    <!-- Use any image you like; keep same width/height in your file -->
+    <img src="campus.png" alt="Campus map demo"
+         width="500" height="300" usemap="#campusMap" />
+
+    <map name="campusMap">
+      <!-- RECT: x1,y1,x2,y2 -->
+      <area shape="rect" coords="20,20,170,110" href="library.html" alt="Library" />
+
+      <!-- CIRCLE: x,y,r -->
+      <area shape="circle" coords="320,90,45" href="cafe.html" alt="Cafeteria" />
+
+      <!-- POLY: x1,y1,x2,y2,x3,y3... -->
+      <area shape="poly" coords="250,200,310,160,380,210,330,260" href="lab.html" alt="Computer Lab" />
+
+      <!-- DEFAULT -->
+      <area shape="default" href="index.html" alt="Home" />
+    </map>
+
+    <figcaption>
+      <strong>Note:</strong> Replace <em>campus.png</em> with your image.
+    </figcaption>
+  </figure>
+
+  <section>
+    <h2>Quick Links</h2>
+    <p>
+      <a href="index.html">Home</a> |
+      <a href="library.html">Library</a> |
+      <a href="lab.html">Lab</a>
+    </p>
+  </section>
+</main>
+
+<footer>
+  <p>Image map practice for Lab.</p>
+</footer>
+</body>
+</html>

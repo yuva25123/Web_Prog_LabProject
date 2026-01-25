@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Mini college info page using common HTML tags." />
+  <title>College Info</title>
+
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.5; }
+    header, footer { padding: 12px; border: 1px solid #ddd; }
+    nav a { margin-right: 12px; text-decoration: none; }
+    main { margin-top: 14px; }
+    .card { border: 1px solid #ddd; padding: 12px; border-radius: 8px; margin-top: 12px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    caption { font-weight: bold; margin-bottom: 6px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    tbody tr:nth-child(even) { background: #f7f7f7; }
+    tbody tr:nth-child(odd) { background: #ffffff; }
+    .note mark { padding: 0 4px; }
+  </style>
+</head>
+
+<body>
+<header>
+  <h1>Web Programming Lab</h1>
+  <p class="note">Today’s topic: <mark>HTML tags</mark> + <u>CSS basics</u> + <strike>old mistakes</strike>.</p>
+
+  <nav>
+    <a href="#about">About</a>
+    <a href="#schedule">Schedule</a>
+    <a href="#lists">Lists</a>
+  </nav>
+</header>
+
+<main>
+  <section id="about" class="card">
+    <h2>About This Page</h2>
+    <article>
+      <h3>Why we use semantic tags?</h3>
+      <p>
+        <strong>Semantic tags</strong> make the page structure clear.
+        This sentence uses <b>b</b>, <i>i</i>, <em>em</em> and <span>span</span>.
+      </p>
+      <aside>
+        <p><small>Tip:</small> Put your main content inside <code>&lt;main&gt;</code>.</p>
+      </aside>
+    </article>
+  </section>
+
+  <section id="schedule" class="card">
+    <h2>Lab Schedule</h2>
+    <p>Next lab on <time datetime="2026-01-06">06 Jan 2026</time>.</p>
+
+    <table>
+      <caption>Weekly Plan</caption>
+      <thead>
+        <tr>
+          <th>Day</th>
+          <th>Topic</th>
+          <th>Task</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="2">Monday</td>
+          <td>HTML Basics</td>
+          <td>Tags practice</td>
+        </tr>
+        <tr>
+          <td>Tables</td>
+          <td>Create table with <span>caption</span></td>
+        </tr>
+        <tr>
+          <td>Tuesday</td>
+          <td colspan="2">Forms + Validation (next experiment)</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="lists" class="card">
+    <h2>Lists</h2>
+
+    <h3>Ordered + Nested List</h3>
+    <ol>
+      <li>Learn tags</li>
+      <li>Practice
+        <ul>
+          <li>Headings</li>
+          <li>Tables</li>
+          <li>Lists</li>
+        </ul>
+      </li>
+      <li>Submit</li>
+    </ol>
+
+    <h3>Description List</h3>
+    <dl>
+      <dt>HTML</dt>
+      <dd>Structure of a webpage</dd>
+      <dt>CSS</dt>
+      <dd>Style (color, spacing, borders)</dd>
+    </dl>
+  </section>
+</main>
+
+<footer>
+  <p>Made for Lab Practice | <a href="#about">Back to top</a></p>
+</footer>
+</body>
+</html>

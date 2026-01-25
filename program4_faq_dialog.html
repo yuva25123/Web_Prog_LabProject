@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ + Dialog</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .box { border: 1px solid #ddd; padding: 12px; border-radius: 8px; max-width: 700px; }
+    button { padding: 8px 12px; cursor: pointer; }
+    dialog { border: 1px solid #aaa; border-radius: 10px; padding: 14px; width: min(520px, 90%); }
+  </style>
+</head>
+<body>
+<header class="box">
+  <h1>FAQ (details/summary) + Dialog</h1>
+  <p>Click the questions and open the dialog for a quick tip.</p>
+  <button id="openBtn">Open Tip</button>
+</header>
+
+<main class="box" style="margin-top:12px;">
+  <section>
+    <h2>Common Questions</h2>
+
+    <details>
+      <summary>What is HTML?</summary>
+      <p>HTML is used to create the structure of webpages.</p>
+    </details>
+
+    <details>
+      <summary>What is CSS?</summary>
+      <p>CSS is used to style the webpage (colors, spacing, layout).</p>
+    </details>
+
+    <details>
+      <summary>What is JS used for?</summary>
+      <p>JavaScript adds interactivity like popup, validation, dynamic changes.</p>
+    </details>
+  </section>
+
+  <section>
+    <h3>Small text break example</h3>
+    <p>
+      VeryLongWordWithoutSpace<wbr>BreakHere<wbr>ToFitOnScreen
+    </p>
+  </section>
+</main>
+
+<dialog id="tipDialog">
+  <h2>Quick Tip</h2>
+  <p>Use <mark>semantic tags</mark> like <code>&lt;header&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;footer&gt;</code>.</p>
+  <button id="closeBtn">Close</button>
+</dialog>
+
+<script>
+  const d = document.getElementById("tipDialog");
+  document.getElementById("openBtn").addEventListener("click", () => d.showModal());
+  document.getElementById("closeBtn").addEventListener("click", () => d.close());
+</script>
+
+<footer style="margin-top:12px;">
+  <p>Dialog + FAQ demo.</p>
+</footer>
+</body>
+</html>

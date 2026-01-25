@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Form Creation and Validation - Lab 0" />
+  <title>Lab 0 - Form Creation & Validation</title>
+
+  <style>
+    :root{
+      --bg:#f3f6ff;
+      --card:#ffffff;
+      --text:#1f2a44;
+      --muted:#5a667e;
+      --border:#d9e2ff;
+      --focus:#5b7cff;
+      --error:#c0392b;
+      --ok:#1e9d55;
+      --btn:#2d6cdf;
+      --btn2:#eef2ff;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .wrap{
+      max-width: 920px;
+      margin: 24px auto;
+      padding: 16px;
+    }
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    h1{ margin:0 0 6px; }
+    .sub{ margin:0 0 14px; color: var(--muted); font-size: 0.95rem; }
+
+    fieldset{
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin: 12px 0;
+      background: #fbfcff;
+    }
+    legend{
+      padding: 0 10px;
+      font-weight: 700;
+      color: #2a3a5e;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .full{ grid-column: 1 / -1; }
+
+    label{
+      display:block;
+      margin: 10px 0 6px;
+      font-weight: 700;
+      color:#223255;
+    }
+    input, select, textarea{
+      width:100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #cfd8ff;
+      background:#ffffff;
+      outline:none;
+    }
+    textarea{ min-height: 82px; resize: vertical; }
+
+    input:focus, select:focus, textarea:focus{
+      border-color: var(--focus);
+      box-shadow: 0 0 0 3px rgba(91,124,255,0.18);
+    }
+
+    .inline{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 12px 16px;
+      align-items:center;
+      margin-top: 6px;
+    }
+    .inline label{ margin:0; font-weight:600; color:#2a3a5e; }
+    .inline input{ width:auto; }
+
+    .hint{
+      margin-top: 6px;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+    .error{
+      margin-top: 6px;
+      font-size: 0.88rem;
+      color: var(--error);
+      min-height: 18px;
+    }
+
+    .invalid{ border-color: #ff6b6b !important; background:#fff5f5; }
+    .valid{ border-color: #35c76f !important; }
+
+    .topbar{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content: space-between;
+      gap: 10px;
+      align-items:center;
+      margin-bottom: 10px;
+    }
+    .topbar .status{
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+    progress{ width: 260px; height: 14px; }
+
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    button, input[type="submit"], input[type="reset"]{
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .primary{
+      background: var(--btn);
+      color:#fff;
+    }
+    .secondary{
+      background: var(--btn2);
+      color:#1f2a44;
+    }
+    .primary:disabled{
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    table{
+      width:100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      border-radius: 12px;
+      overflow:hidden;
+      border: 1px solid var(--border);
+    }
+    caption{
+      text-align:left;
+      padding: 10px;
+      background:#f6f8ff;
+      font-weight: 700;
+      color:#2a3a5e;
+    }
+    th, td{
+      border-top: 1px solid #e7ecff;
+      padding: 10px;
+      text-align:left;
+      vertical-align: top;
+    }
+    th{ background:#fbfcff; width: 34%; }
+
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: 1fr; }
+      progress{ width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Lab 0: Form Creation & Validation</h1>
+      <p class="sub">HTML form elements, input types, and client-side validation using JavaScript.</p>
+
+      <div class="topbar">
+        <div class="status">
+          Completion: <output id="doneText">0%</output>
+        </div>
+        <progress id="doneBar" value="0" max="100"></progress>
+      </div>
+
+      <form id="labForm" action="#" method="post" novalidate autocomplete="on">
+        <fieldset>
+          <legend>Account Details</legend>
+
+          <div class="grid">
+            <div>
+              <label for="username">Username *</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Enter username"
+                required
+                minlength="5"
+                maxlength="15"
+                pattern="^[A-Za-z][A-Za-z0-9_]{4,14}$"
+                autofocus
+              />
+              <div class="hint">5–15 characters, starts with a letter, letters/numbers/underscore only.</div>
+              <div class="error" id="eUsername"></div>
+            </div>
+
+            <div>
+              <label for="email">Email *</label>
+              <input type="email" id="email" name="email" placeholder="name@example.com" required />
+              <div class="error" id="eEmail"></div>
+            </div>
+
+            <div>
+              <label for="password">Password *</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Minimum 8 characters"
+                required
+                minlength="8"
+                maxlength="20"
+                pattern="^(?=.*[A-Za-z])(?=.*\d).{8,20}$"
+              />
+              <div class="hint">Strength: <output id="pwdStrength">—</output></div>
+              <div class="error" id="ePassword"></div>
+            </div>
+
+            <div>
+              <label for="confirmPassword">Confirm Password *</label>
+              <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password" required />
+              <div class="error" id="eConfirmPassword"></div>
+            </div>
+
+            <div>
+              <label for="phone">Phone (10 digits) *</label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="Enter phone number"
+                required
+                pattern="^[0-9]{10}$"
+                maxlength="10"
+              />
+              <div class="error" id="ePhone"></div>
+            </div>
+
+            <div>
+              <label for="website">Website (optional)</label>
+              <input type="url" id="website" name="website" placeholder="https://example.com" />
+              <div class="error" id="eWebsite"></div>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Profile Information</legend>
+
+          <div class="grid">
+            <div>
+              <label for="dept">Department *</label>
+              <select id="dept" name="dept" required>
+                <option value="" disabled selected>Select</option>
+                <optgroup label="Engineering">
+                  <option value="CSE">CSE</option>
+                  <option value="ECE">ECE</option>
+                  <option value="EEE">EEE</option>
+                </optgroup>
+                <optgroup label="Science">
+                  <option value="Maths">Maths</option>
+                  <option value="Physics">Physics</option>
+                </optgroup>
+              </select>
+              <div class="error" id="eDept"></div>
+            </div>
+
+            <div>
+              <label for="city">City (datalist)</label>
+              <input list="cityList" id="city" name="city" placeholder="Type or choose" />
+              <datalist id="cityList">
+                <option value="Chennai"></option>
+                <option value="Coimbatore"></option>
+                <option value="Madurai"></option>
+                <option value="Trichy"></option>
+                <option value="Salem"></option>
+              </datalist>
+              <div class="hint">Uses datalist + option for suggestions.</div>
+            </div>
+
+            <div class="full">
+              <label>Gender *</label>
+              <div class="inline">
+                <label><input type="radio" name="gender" value="Female" required /> Female</label>
+                <label><input type="radio" name="gender" value="Male" /> Male</label>
+                <label><input type="radio" name="gender" value="Other" /> Other</label>
+              </div>
+              <div class="error" id="eGender"></div>
+            </div>
+
+            <div class="full">
+              <label>Skills (choose at least one) *</label>
+              <div class="inline">
+                <label><input type="checkbox" name="skills" value="HTML" /> HTML</label>
+                <label><input type="checkbox" name="skills" value="CSS" /> CSS</label>
+                <label><input type="checkbox" name="skills" value="JavaScript" /> JavaScript</label>
+                <label><input type="checkbox" name="skills" value="C" /> C</label>
+              </div>
+              <div class="error" id="eSkills"></div>
+            </div>
+
+            <div>
+              <label for="age">Age (16–60)</label>
+              <input type="number" id="age" name="age" min="16" max="60" placeholder="Optional" />
+              <div class="error" id="eAge"></div>
+            </div>
+
+            <div>
+              <label for="idcode">ID Code (optional)</label>
+              <input type="text" id="idcode" name="idcode" placeholder="Format: NC-1234" pattern="^NC-\d{4}$" />
+              <div class="hint">Pattern example: NC-1234</div>
+              <div class="error" id="eID"></div>
+            </div>
+
+            <div class="full">
+              <label for="about">About</label>
+              <textarea id="about" name="about" placeholder="Write a short note (optional)"></textarea>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Date & Time Inputs</legend>
+
+          <div class="grid">
+            <div>
+              <label for="date">Date *</label>
+              <input type="date" id="date" name="date" required />
+              <div class="error" id="eDate"></div>
+            </div>
+
+            <div>
+              <label for="time">Time *</label>
+              <input type="time" id="time" name="time" required />
+              <div class="error" id="eTime"></div>
+            </div>
+
+            <div>
+              <label for="dtlocal">Datetime-local</label>
+              <input type="datetime-local" id="dtlocal" name="dtlocal" />
+            </div>
+
+            <div>
+              <label for="month">Month</label>
+              <input type="month" id="month" name="month" />
+            </div>
+
+            <div>
+              <label for="week">Week</label>
+              <input type="week" id="week" name="week" />
+            </div>
+
+            <div>
+              <label for="favColor">Favorite Color</label>
+              <input type="color" id="favColor" name="favColor" value="#2d6cdf" />
+            </div>
+
+            <div class="full">
+              <label for="rating">Confidence (range + output)</label>
+              <input type="range" id="rating" name="rating" min="0" max="10" value="5" />
+              <div class="hint">Value: <output id="ratingOut">5</output>/10</div>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Upload & Agreement</legend>
+
+          <div class="grid">
+            <div>
+              <label for="photo">Upload Photo (optional)</label>
+              <input type="file" id="photo" name="photo" accept="image/*" />
+              <div class="hint">File input included for form demonstration.</div>
+            </div>
+
+            <div>
+              <label for="disabledDemo">Disabled Field (demo)</label>
+              <input type="text" id="disabledDemo" value="Disabled input example" disabled />
+              <div class="hint">Demonstrates the disabled attribute.</div>
+            </div>
+
+            <div class="full">
+              <label>
+                <input type="checkbox" id="terms" required />
+                I agree to the Terms & Conditions *
+              </label>
+              <div class="error" id="eTerms"></div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <input type="submit" class="primary" id="submitBtn" value="Submit" />
+            <button type="button" class="secondary" id="previewBtn">Preview</button>
+            <input type="reset" class="secondary" value="Reset" />
+          </div>
+
+          <div class="hint">The Submit button remains disabled until required validations are satisfied.</div>
+        </fieldset>
+      </form>
+
+      <table id="previewTable" style="display:none;">
+        <caption>Preview Output</caption>
+        <tbody>
+          <tr><th>Username</th><td id="pUsername">—</td></tr>
+          <tr><th>Email</th><td id="pEmail">—</td></tr>
+          <tr><th>Phone</th><td id="pPhone">—</td></tr>
+          <tr><th>Department</th><td id="pDept">—</td></tr>
+          <tr><th>Gender</th><td id="pGender">—</td></tr>
+          <tr><th>Skills</th><td id="pSkills">—</td></tr>
+          <tr><th>Date</th><td id="pDate">—</td></tr>
+          <tr><th>Time</th><td id="pTime">—</td></tr>
+          <tr><th>Confidence</th><td id="pRating">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("labForm");
+
+    const username = document.getElementById("username");
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const confirmPassword = document.getElementById("confirmPassword");
+    const phone = document.getElementById("phone");
+    const website = document.getElementById("website");
+    const dept = document.getElementById("dept");
+    const age = document.getElementById("age");
+    const idcode = document.getElementById("idcode");
+    const date = document.getElementById("date");
+    const time = document.getElementById("time");
+    const terms = document.getElementById("terms");
+
+    const rating = document.getElementById("rating");
+    const ratingOut = document.getElementById("ratingOut");
+    const pwdStrength = document.getElementById("pwdStrength");
+
+    const submitBtn = document.getElementById("submitBtn");
+    const previewBtn = document.getElementById("previewBtn");
+
+    const doneBar = document.getElementById("doneBar");
+    const doneText = document.getElementById("doneText");
+
+    function setError(id, msg) { document.getElementById(id).textContent = msg || ""; }
+
+    function markField(el, ok) {
+      if (!el) return;
+      el.classList.remove("invalid", "valid");
+      el.classList.add(ok ? "valid" : "invalid");
+    }
+
+    function getGender() {
+      const g = document.querySelector('input[name="gender"]:checked');
+      return g ? g.value : "";
+    }
+
+    function getSkills() {
+      return Array.from(document.querySelectorAll('input[name="skills"]:checked'))
+        .map(x => x.value);
+    }
+
+    function isValidURL(value) {
+      if (!value.trim()) return true; // optional
+      try { new URL(value); return true; } catch { return false; }
+    }
+
+    function updatePasswordStrength() {
+      const v = password.value;
+      let score = 0;
+      if (v.length >= 8) score++;
+      if (/[A-Za-z]/.test(v)) score++;
+      if (/\d/.test(v)) score++;
+      if (/[^A-Za-z0-9]/.test(v)) score++;
+      const labels = ["Weak", "Okay", "Good", "Strong", "Very Strong"];
+      pwdStrength.value = labels[score] || "—";
+    }
+
+    function updateProgress() {
+      const requiredChecks = [
+        username.checkValidity(),
+        email.checkValidity(),
+        password.checkValidity(),
+        confirmPassword.value === password.value && confirmPassword.value.length > 0,
+        phone.checkValidity(),
+        dept.value !== "",
+        getGender() !== "",
+        getSkills().length > 0,
+        date.value !== "",
+        time.value !== "",
+        terms.checked
+      ];
+
+      const total = requiredChecks.length;
+      const done = requiredChecks.filter(Boolean).length;
+      const percent = Math.round((done / total) * 100);
+
+      doneBar.value = percent;
+      doneText.value = percent + "%";
+    }
+
+    function validateForm(showAlert) {
+      // Clear messages
+      ["eUsername","eEmail","ePassword","eConfirmPassword","ePhone","eWebsite","eDept","eAge","eID","eGender","eSkills","eDate","eTime","eTerms"]
+        .forEach(id => setError(id, ""));
+
+      let ok = true;
+
+      // Username
+      if (!username.checkValidity()) {
+        ok = false;
+        setError("eUsername", "Enter a valid username (5–15 chars, starts with a letter, letters/numbers/_ only).");
+        markField(username, false);
+      } else markField(username, true);
+
+      // Email
+      if (!email.checkValidity()) {
+        ok = false;
+        setError("eEmail", "Enter a valid email address.");
+        markField(email, false);
+      } else markField(email, true);
+
+      // Password
+      if (!password.checkValidity()) {
+        ok = false;
+        setError("ePassword", "Password must be 8–20 chars and include at least 1 letter and 1 number.");
+        markField(password, false);
+      } else markField(password, true);
+
+      // Confirm Password
+      if (!confirmPassword.value || confirmPassword.value !== password.value) {
+        ok = false;
+        setError("eConfirmPassword", "Passwords do not match.");
+        markField(confirmPassword, false);
+      } else markField(confirmPassword, true);
+
+      // Phone
+      if (!phone.checkValidity()) {
+        ok = false;
+        setError("ePhone", "Enter a 10-digit phone number (digits only).");
+        markField(phone, false);
+      } else markField(phone, true);
+
+      // Website (optional)
+      if (!isValidURL(website.value)) {
+        ok = false;
+        setError("eWebsite", "Enter a valid URL (example: https://example.com).");
+        markField(website, false);
+      } else {
+        website.classList.remove("invalid", "valid");
+        if (website.value.trim()) website.classList.add("valid");
+      }
+
+      // Department
+      if (!dept.value) {
+        ok = false;
+        setError("eDept", "Please select a department.");
+        markField(dept, false);
+      } else markField(dept, true);
+
+      // Age (optional range check)
+      if (age.value.trim()) {
+        const a = Number(age.value);
+        if (Number.isNaN(a) || a < 16 || a > 60) {
+          ok = false;
+          setError("eAge", "Age must be between 16 and 60.");
+          markField(age, false);
+        } else markField(age, true);
+      } else age.classList.remove("invalid", "valid");
+
+      // ID code (optional pattern)
+      if (idcode.value.trim()) {
+        if (!idcode.checkValidity()) {
+          ok = false;
+          setError("eID", "ID code must match pattern NC-1234.");
+          markField(idcode, false);
+        } else markField(idcode, true);
+      } else idcode.classList.remove("invalid", "valid");
+
+      // Gender
+      if (!getGender()) {
+        ok = false;
+        setError("eGender", "Please select a gender.");
+      }
+
+      // Skills
+      if (getSkills().length === 0) {
+        ok = false;
+        setError("eSkills", "Select at least one skill.");
+      }
+
+      // Date & Time
+      if (!date.value) {
+        ok = false;
+        setError("eDate", "Please select a date.");
+        markField(date, false);
+      } else markField(date, true);
+
+      if (!time.value) {
+        ok = false;
+        setError("eTime", "Please select a time.");
+        markField(time, false);
+      } else markField(time, true);
+
+      // Terms
+      if (!terms.checked) {
+        ok = false;
+        setError("eTerms", "You must agree to the terms.");
+      }
+
+      submitBtn.disabled = !ok;
+      updateProgress();
+
+      if (showAlert && !ok) {
+        alert("Please correct the highlighted fields.");
+      }
+      return ok;
+    }
+
+    function previewData() {
+      document.getElementById("previewTable").style.display = "table";
+
+      document.getElementById("pUsername").textContent = username.value || "—";
+      document.getElementById("pEmail").textContent = email.value || "—";
+      document.getElementById("pPhone").textContent = phone.value || "—";
+      document.getElementById("pDept").textContent = dept.value || "—";
+      document.getElementById("pGender").textContent = getGender() || "—";
+      document.getElementById("pSkills").textContent = getSkills().join(", ") || "—";
+      document.getElementById("pDate").textContent = date.value || "—";
+      document.getElementById("pTime").textContent = time.value || "—";
+      document.getElementById("pRating").textContent = rating.value + "/10";
+    }
+
+    // Range output
+    rating.addEventListener("input", () => {
+      ratingOut.value = rating.value;
+      updateProgress();
+    });
+
+    // Password strength display
+    password.addEventListener("input", () => {
+      updatePasswordStrength();
+      validateForm(false);
+    });
+
+    // Live validation on input/blur
+    [username,email,password,confirmPassword,phone,website,dept,age,idcode,date,time,terms].forEach(el => {
+      el.addEventListener("input", () => validateForm(false));
+      el.addEventListener("blur", () => validateForm(false));
+    });
+    document.querySelectorAll('input[name="gender"]').forEach(r => r.addEventListener("change", () => validateForm(false)));
+    document.querySelectorAll('input[name="skills"]').forEach(c => c.addEventListener("change", () => validateForm(false)));
+
+    // Submit
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (!validateForm(true)) return;
+      previewData();
+      alert("Form submitted successfully.");
+    });
+
+    // Preview button
+    previewBtn.addEventListener("click", () => {
+      if (!validateForm(true)) return;
+      previewData();
+    });
+
+    // Reset
+    form.addEventListener("reset", () => {
+      setTimeout(() => {
+        document.getElementById("previewTable").style.display = "none";
+        document.querySelectorAll(".valid,.invalid").forEach(x => x.classList.remove("valid","invalid"));
+        ["eUsername","eEmail","ePassword","eConfirmPassword","ePhone","eWebsite","eDept","eAge","eID","eGender","eSkills","eDate","eTime","eTerms"]
+          .forEach(id => setError(id, ""));
+        ratingOut.value = "5";
+        pwdStrength.value = "—";
+        submitBtn.disabled = true;
+        updateProgress();
+      }, 0);
+    });
+
+    // Initial state
+    ratingOut.value = rating.value;
+    updatePasswordStrength();
+    submitBtn.disabled = true;
+    validateForm(false);
+  </script>
+</body>
+</html>
