@@ -35,7 +35,7 @@ public class Anime {
 
     public void setId(int id) {
         this.id = id;
-    }ਸ
+    }
     public String getTitle() {
         return title;
     }
