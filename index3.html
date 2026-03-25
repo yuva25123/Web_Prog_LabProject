@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AniVerseX - Exp 3 (jQuery + AJAX)</title>
+
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: rgba(255,255,255,0.08);
+      --card2: rgba(255,255,255,0.12);
+      --text: #eaf0ff;
+      --muted: rgba(234,240,255,0.72);
+      --accent: #7c5cff;
+      --accent2: #22c55e;
+      --danger: #ef4444;
+      --border: rgba(255,255,255,0.14);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 10%, rgba(124,92,255,0.25), transparent),
+                  radial-gradient(1000px 700px at 80% 30%, rgba(34,197,94,0.18), transparent),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .container { width: min(1100px, 92vw); margin: 24px auto 60px; }
+
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 18px 18px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 18px; backdrop-filter: blur(10px);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .logo {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), #ff4fd8);
+      display: grid; place-items: center;
+      font-weight: 800;
+      box-shadow: 0 10px 25px rgba(124,92,255,0.25);
+    }
+    .brand h1 { margin: 0; font-size: 18px; }
+    .brand p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+
+    .searchbar {
+      display: flex; gap: 10px; align-items: center;
+      width: min(520px, 100%);
+    }
+    input[type="text"]{
+      flex: 1;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      outline: none;
+    }
+    input[type="text"]::placeholder { color: rgba(234,240,255,0.55); }
+
+    button {
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: var(--accent);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button:hover { filter: brightness(1.05); }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 16px;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      backdrop-filter: blur(10px);
+    }
+
+    .status {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 12px;
+    }
+    .status small { color: var(--muted); }
+
+    .loader {
+      display: none;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(234,240,255,0.6);
+      animation: blink 1s infinite;
+    }
+    .dot:nth-child(2){ animation-delay: 0.2s; }
+    .dot:nth-child(3){ animation-delay: 0.4s; }
+    @keyframes blink { 0%, 100%{ opacity: 0.2; } 50%{ opacity: 1; } }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      display: grid;
+      grid-template-columns: 88px 1fr;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+    }
+    .thumb {
+      width: 88px; height: 120px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .meta h3 { margin: 0; font-size: 15px; line-height: 1.25; }
+    .meta p { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+    .pillrow { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .pill {
+      font-size: 12px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(234,240,255,0.85);
+    }
+
+    .card .actions { margin-top: 10px; display: flex; gap: 8px; }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-weight: 700;
+    }
+    .btn-green { background: var(--accent2); }
+
+    /* Reviews list */
+    .reviews h2 { margin: 0 0 10px; font-size: 16px; }
+    .review-item {
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      margin-bottom: 10px;
+    }
+    .review-item b { display: block; margin-bottom: 4px; }
+    .review-item small { color: var(--muted); }
+
+    .empty {
+      color: var(--muted);
+      padding: 10px 0;
+    }
+
+    /* Modal */
+    .overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.55);
+      padding: 18px;
+    }
+    .modal {
+      width: min(560px, 96vw);
+      margin: 5vh auto 0;
+      background: rgba(10,16,32,0.9);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      backdrop-filter: blur(12px);
+    }
+    .modal h2 { margin: 0 0 6px; font-size: 18px; }
+    .modal p { margin: 0 0 12px; color: var(--muted); }
+    .row { display: grid; gap: 10px; }
+    label { font-size: 13px; color: rgba(234,240,255,0.85); }
+    textarea, input[type="number"]{
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      outline: none;
+    }
+    textarea { min-height: 90px; resize: vertical; }
+
+    .error { color: var(--danger); font-size: 13px; display: none; }
+    .modal .actions { margin-top: 12px; display: flex; gap: 10px; justify-content: flex-end; }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+      .cards { grid-template-columns: 1fr; }
+      header { flex-direction: column; align-items: stretch; }
+      .searchbar { width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">AX</div>
+        <div>
+          <h1>AniVerseX</h1>
+          <p>Experiment 3: jQuery + AJAX (Anime Search + Reviews)</p>
+        </div>
+      </div>
+
+      <div class="searchbar">
+        <input id="query" type="text" placeholder="Search anime (e.g., Naruto, One Piece)..." />
+        <button id="searchBtn">Search</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Left panel: results -->
+      <section class="panel">
+        <div class="status">
+          <div>
+            <b id="statusTitle">Ready</b><br/>
+            <small id="statusSub">Type an anime name and click Search.</small>
+          </div>
+
+          <div class="loader" id="loader">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span>Loading...</span>
+          </div>
+        </div>
+
+        <div class="cards" id="results"></div>
+      </section>
+
+      <!-- Right panel: reviews -->
+      <aside class="panel reviews">
+        <h2>My Reviews (Saved Locally)</h2>
+        <div id="reviewList"></div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Review Modal -->
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <h2>Add Review</h2>
+      <p id="modalAnimeName">Anime: -</p>
+
+      <div class="row">
+        <div>
+          <label for="rating">Rating (1–10)</label>
+          <input id="rating" type="number" min="1" max="10" placeholder="Enter rating" />
+          <div class="error" id="ratingErr">Please enter a rating between 1 and 10.</div>
+        </div>
+
+        <div>
+          <label for="reviewText">Review (min 10 characters)</label>
+          <textarea id="reviewText" placeholder="Write your thoughts (no spoilers)..."></textarea>
+          <div class="error" id="textErr">Review must be at least 10 characters.</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-secondary" id="cancelBtn">Cancel</button>
+        <button class="btn-green" id="saveBtn">Save Review</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // -----------------------------
+    // Exp 3 Demonstration:
+    // jQuery: events + DOM updates + validation
+    // AJAX: $.ajax() fetches anime data without page reload
+    // -----------------------------
+
+    let selectedAnime = null;
+
+    function setStatus(title, sub) {
+      $("#statusTitle").text(title);
+      $("#statusSub").text(sub);
+    }
+
+    function showLoader(show) {
+      if (show) $("#loader").fadeIn(120);
+      else $("#loader").fadeOut(120);
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, (m) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;",
+        '"': "&quot;", "'": "&#039;"
+      }[m]));
+    }
+
+    function loadReviews() {
+      const data = JSON.parse(localStorage.getItem("aniversex_reviews") || "[]");
+      const $list = $("#reviewList");
+      $list.empty();
+
+      if (data.length === 0) {
+        $list.append(`<div class="empty">No reviews yet. Add one from search results.</div>`);
+        return;
+      }
+
+      data.slice().reverse().forEach(r => {
+        $list.append(`
+          <div class="review-item">
+            <b>${escapeHtml(r.title)} <span class="pill">★ ${r.rating}/10</span></b>
+            <div>${escapeHtml(r.text)}</div>
+            <small>Saved on: ${escapeHtml(r.date)}</small>
+          </div>
+        `);
+      });
+    }
+
+    function saveReviewToLocal(reviewObj) {
+      const data = JSON.parse(localStorage.getItem("aniversex_reviews") || "[]");
+      data.push(reviewObj);
+      localStorage.setItem("aniversex_reviews", JSON.stringify(data));
+      loadReviews();
+    }
+
+    function openModal(anime) {
+      selectedAnime = anime;
+      $("#modalAnimeName").text("Anime: " + anime.title);
+      $("#rating").val("");
+      $("#reviewText").val("");
+      $(".error").hide();
+      $("#overlay").fadeIn(150);
+    }
+
+    function closeModal() {
+      $("#overlay").fadeOut(150);
+      selectedAnime = null;
+    }
+
+    function renderResults(items) {
+      const $results = $("#results");
+      $results.empty();
+
+      if (!items || items.length === 0) {
+        $results.append(`<div class="empty">No results found. Try another keyword.</div>`);
+        return;
+      }
+
+      items.slice(0, 10).forEach(anime => {
+        const title = anime.title || "Unknown";
+        const img = (anime.images && anime.images.jpg && anime.images.jpg.image_url) ? anime.images.jpg.image_url : "";
+        const score = anime.score ?? "NA";
+        const eps = anime.episodes ?? "NA";
+        const type = anime.type ?? "NA";
+
+        const safeTitle = escapeHtml(title);
+
+        $results.append(`
+          <div class="card">
+            <img class="thumb" src="${img}" alt="${safeTitle}" />
+            <div class="meta">
+              <h3 title="${safeTitle}">${safeTitle}</h3>
+              <div class="pillrow">
+                <span class="pill">Type: ${escapeHtml(type)}</span>
+                <span class="pill">Score: ${escapeHtml(score)}</span>
+                <span class="pill">Episodes: ${escapeHtml(eps)}</span>
+              </div>
+              <div class="actions">
+                <button class="btn-secondary detailsBtn">Quick Highlight</button>
+                <button class="btn-green reviewBtn">Add Review</button>
+              </div>
+            </div>
+          </div>
+        `);
+
+        // Attach events using jQuery (demonstration)
+        const $lastCard = $results.children().last();
+        $lastCard.find(".reviewBtn").on("click", () => openModal({ title }));
+        $lastCard.find(".detailsBtn").on("click", function() {
+          // jQuery effect demo
+          $(this).closest(".card").animate({ opacity: 0.85 }, 120).animate({ opacity: 1 }, 120);
+          setStatus("Highlighted: " + title, "This shows jQuery DOM selection + animation.");
+        });
+      });
+    }
+
+    function searchAnime(q) {
+      setStatus("Searching...", "Using AJAX to fetch data without page reload.");
+      showLoader(true);
+      $("#searchBtn").prop("disabled", true);
+
+      // AJAX call using jQuery
+      $.ajax({
+        url: "https://api.jikan.moe/v4/anime",
+        method: "GET",
+        data: { q: q, limit: 12 },
+        dataType: "json",
+        timeout: 12000
+      })
+      .done(function(response) {
+        const items = response && response.data ? response.data : [];
+        setStatus("Results Loaded", "Found " + items.length + " items for: " + q);
+        renderResults(items);
+      })
+      .fail(function(xhr, status) {
+        setStatus("Error", "Request failed (" + status + "). Try again later.");
+        $("#results").html(`<div class="empty">Could not fetch data. Check internet or try another time.</div>`);
+      })
+      .always(function() {
+        showLoader(false);
+        $("#searchBtn").prop("disabled", false);
+      });
+    }
+
+    // jQuery: document ready + event handling
+    $(function() {
+      loadReviews();
+
+      $("#searchBtn").on("click", function() {
+        const q = $("#query").val().trim();
+        if (q.length < 2) {
+          setStatus("Input Needed", "Please enter at least 2 characters.");
+          $("#results").html(`<div class="empty">Enter at least 2 characters to search.</div>`);
+          return;
+        }
+        searchAnime(q);
+      });
+
+      $("#query").on("keypress", function(e) {
+        if (e.key === "Enter") $("#searchBtn").click();
+      });
+
+      $("#cancelBtn").on("click", closeModal);
+
+      $("#overlay").on("click", function(e) {
+        if (e.target.id === "overlay") closeModal();
+      });
+
+      $("#saveBtn").on("click", function() {
+        // jQuery validation demo
+        const rating = Number($("#rating").val());
+        const text = $("#reviewText").val().trim();
+
+        let ok = true;
+
+        if (!selectedAnime) return;
+
+        if (!(rating >= 1 && rating <= 10)) {
+          $("#ratingErr").show();
+          ok = false;
+        } else {
+          $("#ratingErr").hide();
+        }
+
+        if (text.length < 10) {
+          $("#textErr").show();
+          ok = false;
+        } else {
+          $("#textErr").hide();
+        }
+
+        if (!ok) return;
+
+        saveReviewToLocal({
+          title: selectedAnime.title,
+          rating: rating,
+          text: text,
+          date: new Date().toLocaleString()
+        });
+
+        setStatus("Review Saved", "Stored in localStorage using jQuery events.");
+        closeModal();
+      });
+    });
+  </script>
+</body>
+</html>
