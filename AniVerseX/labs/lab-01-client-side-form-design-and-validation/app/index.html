@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AniVerseX Lab 1 - Form Design and Validation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page-glow" aria-hidden="true"></div>
+
+  <header class="hero container">
+    <p class="eyebrow">AniVerseX Lab 1</p>
+    <h1>Client-Side Form Design and Validation</h1>
+    <p class="hero-text">
+      A beginner-friendly anime-themed forms page with registration, login, and review submission.
+      Each form uses simple JavaScript validation and user-friendly error messages.
+    </p>
+  </header>
+
+  <main class="container forms-layout">
+    <section class="form-card">
+      <div class="card-head">
+        <p class="card-tag">New User</p>
+        <h2>Registration Form</h2>
+      </div>
+
+      <form id="registrationForm" novalidate>
+        <div class="field-group" id="registerNameGroup">
+          <label for="registerName">Full Name</label>
+          <input type="text" id="registerName" name="registerName" placeholder="Enter your full name">
+          <p class="error-text" id="registerNameError"></p>
+        </div>
+
+        <div class="field-group" id="registerEmailGroup">
+          <label for="registerEmail">Email Address</label>
+          <input type="email" id="registerEmail" name="registerEmail" placeholder="example@anime.com">
+          <p class="error-text" id="registerEmailError"></p>
+        </div>
+
+        <div class="field-group" id="registerPasswordGroup">
+          <label for="registerPassword">Password</label>
+          <input type="password" id="registerPassword" name="registerPassword" placeholder="Minimum 8 characters">
+          <p class="error-text" id="registerPasswordError"></p>
+        </div>
+
+        <div class="field-group" id="registerConfirmPasswordGroup">
+          <label for="registerConfirmPassword">Confirm Password</label>
+          <input type="password" id="registerConfirmPassword" name="registerConfirmPassword" placeholder="Re-enter your password">
+          <p class="error-text" id="registerConfirmPasswordError"></p>
+        </div>
+
+        <button type="submit" class="primary-btn">Create Account</button>
+        <p class="form-message" id="registrationMessage"></p>
+      </form>
+    </section>
+
+    <section class="form-card">
+      <div class="card-head">
+        <p class="card-tag">Returning Fan</p>
+        <h2>Login Form</h2>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <div class="field-group" id="loginEmailGroup">
+          <label for="loginEmail">Email Address</label>
+          <input type="email" id="loginEmail" name="loginEmail" placeholder="Enter your registered email">
+          <p class="error-text" id="loginEmailError"></p>
+        </div>
+
+        <div class="field-group" id="loginPasswordGroup">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" name="loginPassword" placeholder="Enter your password">
+          <p class="error-text" id="loginPasswordError"></p>
+        </div>
+
+        <button type="submit" class="primary-btn">Login to AniVerseX</button>
+        <p class="form-message" id="loginMessage"></p>
+      </form>
+    </section>
+
+    <section class="form-card review-card">
+      <div class="card-head">
+        <p class="card-tag">Community Corner</p>
+        <h2>Review Submission Form</h2>
+      </div>
+
+      <form id="reviewForm" novalidate>
+        <div class="field-group" id="animeTitleGroup">
+          <label for="animeTitle">Anime Title</label>
+          <select id="animeTitle" name="animeTitle">
+            <option value="">Select an anime</option>
+            <option value="Attack on Titan">Attack on Titan</option>
+            <option value="Demon Slayer">Demon Slayer</option>
+            <option value="Jujutsu Kaisen">Jujutsu Kaisen</option>
+            <option value="Naruto">Naruto</option>
+            <option value="One Piece">One Piece</option>
+          </select>
+          <p class="error-text" id="animeTitleError"></p>
+        </div>
+
+        <div class="field-group" id="reviewerNameGroup">
+          <label for="reviewerName">Reviewer Name</label>
+          <input type="text" id="reviewerName" name="reviewerName" placeholder="Enter your name">
+          <p class="error-text" id="reviewerNameError"></p>
+        </div>
+
+        <div class="field-group" id="ratingGroup">
+          <label for="rating">Rating</label>
+          <select id="rating" name="rating">
+            <option value="">Choose a rating</option>
+            <option value="1">1 - Poor</option>
+            <option value="2">2 - Fair</option>
+            <option value="3">3 - Good</option>
+            <option value="4">4 - Very Good</option>
+            <option value="5">5 - Excellent</option>
+          </select>
+          <p class="error-text" id="ratingError"></p>
+        </div>
+
+        <div class="field-group" id="reviewTextGroup">
+          <label for="reviewText">Your Review</label>
+          <textarea id="reviewText" name="reviewText" rows="5" placeholder="Write a short spoiler-free review"></textarea>
+          <p class="error-text" id="reviewTextError"></p>
+        </div>
+
+        <button type="submit" class="primary-btn">Submit Review</button>
+        <p class="form-message" id="reviewMessage"></p>
+      </form>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

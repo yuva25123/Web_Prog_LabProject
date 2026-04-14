@@ -3,5 +3,5 @@
 This folder is reserved for the AniVerseX GET and POST experiment.
 
 Status:
-- Placeholder folder created during repository restructuring.
-- Implementation has not been moved here yet.
+- Implementation added.
+- Includes a GET search form and a POST review form built with plain HTML, CSS, and JavaScript.
