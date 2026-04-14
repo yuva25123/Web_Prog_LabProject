@@ -12,46 +12,34 @@
   <header class="site-header container">
     <div class="brand-row">
       <img src="images/logo.png" alt="AniVerseX Logo" class="site-logo" />
-      <h1>Anime Recommendations & Reviews</h1>
+      <div>
+        <p class="eyebrow">AniVerseX Lab 3</p>
+        <h1>JavaScript Events and Objects</h1>
+      </div>
     </div>
-    <p class="subtitle">Experiment 2: Events and Objects with Advanced JavaScript</p>
+    <p class="subtitle">Explore anime cards, search, filter, and review using simple JavaScript events.</p>
   </header>
 
   <main class="container app-grid">
-    <section class="panel form-panel">
-      <h2>Write a Review</h2>
-
-      <form id="reviewForm" novalidate>
-        <div class="field-group">
-          <label for="animeSelect">Select Anime</label>
-          <select id="animeSelect" name="anime"></select>
+    <section class="panel">
+      <div class="controls">
+        <div class="control">
+          <label for="searchInput">Search by title</label>
+          <input id="searchInput" type="text" placeholder="Type to search (keyup)">
         </div>
-
-        <div class="field-group">
-          <label for="ratingRange">Rating: <span id="ratingValue">3</span>/5</label>
-          <input id="ratingRange" name="rating" type="range" min="1" max="5" value="3" />
+        <div class="control">
+          <label for="genreFilter">Filter by genre</label>
+          <select id="genreFilter">
+            <option value="all">All Genres</option>
+          </select>
         </div>
+      </div>
 
-        <div class="field-group">
-          <label for="reviewerName">Reviewer Name</label>
-          <input id="reviewerName" name="reviewer" type="text" placeholder="Enter your name" />
-        </div>
-
-        <div class="field-group">
-          <label for="reviewText">Review</label>
-          <textarea id="reviewText" name="reviewText" rows="5" placeholder="Share your spoiler-free thoughts"></textarea>
-        </div>
-
-        <div class="button-row">
-          <button id="addReviewBtn" type="submit">Add Review</button>
-          <button id="favoriteBtn" type="button">Add to Favorites</button>
-          <button id="resetBtn" type="button" class="ghost">Reset</button>
-        </div>
-      </form>
+      <div class="status-line" id="hoverStatus">Hover over a card to see details</div>
+      <div class="card-grid" id="animeGrid"></div>
     </section>
 
-    <section class="panel details-panel" id="detailsCard">
-      <div class="status-line" id="hoverStatus">Hover here to see anime status</div>
+    <section class="panel details-panel">
       <div id="animeDetails"></div>
 
       <section class="reviews-wrap">
@@ -60,6 +48,37 @@
       </section>
     </section>
   </main>
+
+  <section class="panel container form-panel">
+    <h2>Submit a Review (submit event)</h2>
+
+    <form id="reviewForm" novalidate>
+      <div class="field-group">
+        <label for="animeSelect">Select Anime</label>
+        <select id="animeSelect" name="anime"></select>
+      </div>
+
+      <div class="field-group">
+        <label for="ratingRange">Rating: <span id="ratingValue">3</span>/5</label>
+        <input id="ratingRange" name="rating" type="range" min="1" max="5" value="3" />
+      </div>
+
+      <div class="field-group">
+        <label for="reviewerName">Reviewer Name</label>
+        <input id="reviewerName" name="reviewer" type="text" placeholder="Enter your name" />
+      </div>
+
+      <div class="field-group">
+        <label for="reviewText">Review</label>
+        <textarea id="reviewText" name="reviewText" rows="4" placeholder="Share your spoiler-free thoughts"></textarea>
+      </div>
+
+      <div class="button-row">
+        <button id="addReviewBtn" type="submit">Add Review</button>
+        <button id="resetBtn" type="button" class="ghost">Reset</button>
+      </div>
+    </form>
+  </section>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 

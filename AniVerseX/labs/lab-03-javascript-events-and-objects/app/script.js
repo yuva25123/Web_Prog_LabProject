@@ -1,200 +1,169 @@
 "use strict";
 
-// Class-based object model for anime items.
-class Anime {
-  constructor(id, title, year, episodes, genres, description) {
-    this.id = id;
-    this.title = title;
-    this.year = year;
-    this.episodes = episodes;
-    this.genres = genres;
-    this.description = description;
-    this.favorite = false;
-    this.reviews = [];
-  }
-}
-
-// In-memory data store (offline, no API usage).
+// JavaScript objects: each anime is a simple object with properties.
 const animeList = [
-  new Anime(
-    1,
-    "Attack on Titan",
-    2013,
-    89,
-    ["Action", "Drama", "Dark Fantasy"],
-    "In a world behind giant walls, humanity faces terrifying Titans while soldiers uncover hidden truths."
-  ),
-  new Anime(
-    2,
-    "Demon Slayer",
-    2019,
-    55,
-    ["Action", "Adventure", "Supernatural"],
-    "A determined boy joins the Demon Slayer Corps to protect his sister and challenge dangerous demons."
-  ),
-  new Anime(
-    3,
-    "Death Note",
-    2006,
-    37,
-    ["Psychological", "Thriller", "Mystery"],
-    "A genius student discovers a notebook with deadly power and enters a mind game with a brilliant detective."
-  ),
-  new Anime(
-    4,
-    "Naruto",
-    2002,
-    220,
-    ["Action", "Adventure", "Shonen"],
-    "A young ninja with big dreams trains, grows, and protects his village through difficult missions."
-  )
+  {
+    id: 1,
+    title: "Attack on Titan",
+    genre: "Action",
+    rating: 4.8,
+    description: "Humanity fights Titans while uncovering hidden truths.",
+    image: "images/aot.jpg",
+    favorite: false,
+    reviews: []
+  },
+  {
+    id: 2,
+    title: "Demon Slayer",
+    genre: "Adventure",
+    rating: 4.6,
+    description: "A boy joins the Demon Slayer Corps to save his sister.",
+    image: "images/demon_slayer.jpg",
+    favorite: false,
+    reviews: []
+  },
+  {
+    id: 3,
+    title: "Death Note",
+    genre: "Thriller",
+    rating: 4.9,
+    description: "A student finds a notebook with deadly power.",
+    image: "images/deathnote.jpg",
+    favorite: false,
+    reviews: []
+  },
+  {
+    id: 4,
+    title: "Naruto",
+    genre: "Shonen",
+    rating: 4.4,
+    description: "A young ninja trains to protect his village.",
+    image: "images/naruto.jpg",
+    favorite: false,
+    reviews: []
+  },
+  {
+    id: 5,
+    title: "One Punch Man",
+    genre: "Comedy",
+    rating: 4.3,
+    description: "A hero defeats any enemy with a single punch.",
+    image: "images/one_punch_man.jpg",
+    favorite: false,
+    reviews: []
+  }
 ];
 
-const posterMap = {
-  "Death Note": "images/deathnote.jpg",
-  Naruto: "images/naruto.jpg",
-  "Attack on Titan": "images/aot.jpg",
-  "Demon Slayer": "images/demon_slayer.jpg"
-};
-
-// Factory function for review objects.
-const createReviewObject = (name, rating, text) => ({
-  id: Date.now(),
-  name,
-  rating,
-  text,
-  createdAt: new Date().toLocaleString()
-});
-
 // DOM references.
+const animeGrid = document.getElementById("animeGrid");
+const hoverStatus = document.getElementById("hoverStatus");
+const animeDetails = document.getElementById("animeDetails");
+const reviewsList = document.getElementById("reviewsList");
+const reviewsHeading = document.getElementById("reviewsHeading");
+const searchInput = document.getElementById("searchInput");
+const genreFilter = document.getElementById("genreFilter");
+
 const reviewForm = document.getElementById("reviewForm");
 const animeSelect = document.getElementById("animeSelect");
 const ratingRange = document.getElementById("ratingRange");
 const ratingValue = document.getElementById("ratingValue");
 const reviewerName = document.getElementById("reviewerName");
 const reviewText = document.getElementById("reviewText");
-const addReviewBtn = document.getElementById("addReviewBtn");
-const favoriteBtn = document.getElementById("favoriteBtn");
 const resetBtn = document.getElementById("resetBtn");
-const detailsCard = document.getElementById("detailsCard");
-const hoverStatus = document.getElementById("hoverStatus");
-const animeDetails = document.getElementById("animeDetails");
-const reviewsList = document.getElementById("reviewsList");
-const reviewsHeading = document.getElementById("reviewsHeading");
-const toast = document.getElementById("toast");
 
-let toastTimer;
+let selectedAnimeId = animeList[0].id;
 
-const getSelectedAnime = () => {
-  const selectedId = Number(animeSelect.value);
-  return animeList.find(({ id }) => id === selectedId);
-};
-
-const showToast = (message, type = "") => {
-  toast.textContent = message;
-  toast.className = `toast ${type} show`;
-
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => {
-    toast.classList.remove("show");
-  }, 1800);
+const renderGenreOptions = () => {
+  const genres = ["all", ...new Set(animeList.map((anime) => anime.genre))];
+  genreFilter.innerHTML = genres
+    .map((genre) => `<option value="${genre}">${genre}</option>`)
+    .join("");
 };
 
 const renderAnimeOptions = () => {
   animeSelect.innerHTML = animeList
-    .map(({ id, title }) => `<option value="${id}">${title}</option>`)
+    .map((anime) => `<option value="${anime.id}">${anime.title}</option>`)
     .join("");
 };
 
-const renderAnime = () => {
-  const anime = getSelectedAnime();
+const getFilteredAnime = () => {
+  const searchValue = searchInput.value.trim().toLowerCase();
+  const selectedGenre = genreFilter.value;
+
+  return animeList.filter((anime) => {
+    const matchesSearch = anime.title.toLowerCase().includes(searchValue);
+    const matchesGenre = selectedGenre === "all" || anime.genre === selectedGenre;
+    return matchesSearch && matchesGenre;
+  });
+};
+
+const renderAnimeGrid = () => {
+  const filteredAnime = getFilteredAnime();
+
+  animeGrid.innerHTML = filteredAnime
+    .map(
+      (anime) => `
+        <article class="anime-card ${anime.favorite ? "favorite" : ""}" data-id="${anime.id}">
+          <img class="anime-poster" src="${anime.image}" alt="${anime.title}">
+          <h3 class="anime-title">${anime.title}</h3>
+          <p class="anime-meta">${anime.genre} • ⭐ ${anime.rating}</p>
+        </article>
+      `
+    )
+    .join("");
+};
+
+const getAnimeById = (id) => animeList.find((anime) => anime.id === id);
+
+const renderAnimeDetails = () => {
+  const anime = getAnimeById(selectedAnimeId);
   if (!anime) return;
 
-  // Destructuring + template literals for dynamic UI generation.
-  const { title, year, episodes, genres, description, favorite } = anime;
-  const posterSrc = posterMap[title] || "images/deathnote.jpg";
-
-  detailsCard.classList.toggle("favorite", favorite);
-  favoriteBtn.textContent = favorite ? "Remove Favorite" : "Add to Favorites";
-
   animeDetails.innerHTML = `
-    <h2>${title}</h2>
-    <img id="animePoster" class="anime-poster" src="${posterSrc}" alt="Anime Poster" />
-    <p><strong>Year:</strong> ${year}</p>
-    <p><strong>Episodes:</strong> ${episodes}</p>
-    <div>
-      <strong>Genres:</strong>
-      <div class="genres">
-        ${genres.map((genre) => `<span class="genre-pill">${genre}</span>`).join("")}
-      </div>
-    </div>
-    <p><strong>Description:</strong> ${description}</p>
+    <h2>${anime.title}</h2>
+    <p><strong>Genre:</strong> ${anime.genre}</p>
+    <p><strong>Rating:</strong> ⭐ ${anime.rating}</p>
+    <p><strong>Description:</strong> ${anime.description}</p>
   `;
 
   renderReviews();
 };
 
 const renderReviews = () => {
-  const anime = getSelectedAnime();
+  const anime = getAnimeById(selectedAnimeId);
   if (!anime) return;
 
-  // Using filter to safely render only valid review text.
-  const visibleReviews = anime.reviews.filter(({ text }) => text.trim().length > 0);
-  reviewsHeading.textContent = `Reviews (${visibleReviews.length})`;
-
-  reviewsList.innerHTML = visibleReviews.length
-    ? visibleReviews
+  reviewsHeading.textContent = `Reviews (${anime.reviews.length})`;
+  reviewsList.innerHTML = anime.reviews.length
+    ? anime.reviews
         .map(
-          ({ name, rating, text, createdAt }) => `
+          (review) => `
             <article class="review-card">
-              <p><strong>${name}</strong> rated <strong>${rating}/5</strong></p>
-              <p>${text}</p>
-              <p><small>${createdAt}</small></p>
+              <p><strong>${review.name}</strong> rated <strong>${review.rating}/5</strong></p>
+              <p>${review.text}</p>
             </article>
           `
         )
         .join("")
-    : '<p class="empty-state">No reviews yet. Be the first to add one.</p>';
-};
-
-const validateForm = () => {
-  const name = reviewerName.value.trim();
-  const text = reviewText.value.trim();
-
-  if (!name || !text) {
-    showToast("Name and review are required.", "error");
-    return false;
-  }
-  return true;
+    : '<p class="empty-state">No reviews yet. Add the first one below.</p>';
 };
 
 const addReview = () => {
-  if (!validateForm()) return;
-
-  const anime = getSelectedAnime();
-  if (!anime) return;
-
   const name = reviewerName.value.trim();
   const text = reviewText.value.trim();
   const rating = Number(ratingRange.value);
 
-  const newReview = createReviewObject(name, rating, text);
+  if (!name || !text) {
+    alert("Reviewer name and review text are required.");
+    return;
+  }
 
-  // Spread operator to update in-memory reviews array immutably.
-  anime.reviews = [...anime.reviews, newReview];
-
-  renderReviews();
-  reviewText.value = "";
-  showToast("Review Added");
-};
-
-const toggleFavorite = () => {
-  const anime = getSelectedAnime();
+  const anime = getAnimeById(selectedAnimeId);
   if (!anime) return;
 
-  anime.favorite = !anime.favorite;
-  renderAnime();
-  showToast(anime.favorite ? "Added to Favorites" : "Removed from Favorites");
+  anime.reviews.push({ name, text, rating });
+  reviewText.value = "";
+  renderReviews();
 };
 
 const resetForm = () => {
@@ -202,38 +171,65 @@ const resetForm = () => {
   reviewText.value = "";
   ratingRange.value = "3";
   ratingValue.textContent = "3";
-  showToast("Form Reset");
 };
 
-const init = () => {
-  renderAnimeOptions();
-  animeSelect.value = String(animeList[0].id);
-  renderAnime();
-};
+// Events: keyup for search.
+searchInput.addEventListener("keyup", renderAnimeGrid);
 
-// Event Handling Section (all via addEventListener).
-animeSelect.addEventListener("change", renderAnime);
-ratingRange.addEventListener("input", () => {
-  ratingValue.textContent = ratingRange.value;
+// Events: change for genre filter and select dropdown.
+genreFilter.addEventListener("change", renderAnimeGrid);
+animeSelect.addEventListener("change", (event) => {
+  selectedAnimeId = Number(event.target.value);
+  renderAnimeDetails();
 });
 
-addReviewBtn.addEventListener("click", (event) => {
+// Events: click, dblclick, mouseover, mouseout on cards.
+animeGrid.addEventListener("click", (event) => {
+  const card = event.target.closest(".anime-card");
+  if (!card) return;
+  selectedAnimeId = Number(card.dataset.id);
+  renderAnimeDetails();
+});
+
+animeGrid.addEventListener("dblclick", (event) => {
+  const card = event.target.closest(".anime-card");
+  if (!card) return;
+  const anime = getAnimeById(Number(card.dataset.id));
+  anime.favorite = !anime.favorite;
+  renderAnimeGrid();
+});
+
+animeGrid.addEventListener("mouseover", (event) => {
+  const card = event.target.closest(".anime-card");
+  if (!card) return;
+  const anime = getAnimeById(Number(card.dataset.id));
+  hoverStatus.textContent = `Hovering: ${anime.title} (${anime.genre})`;
+});
+
+animeGrid.addEventListener("mouseout", (event) => {
+  const card = event.target.closest(".anime-card");
+  if (!card) return;
+  hoverStatus.textContent = "Hover over a card to see details";
+});
+
+// Event: submit for review form.
+reviewForm.addEventListener("submit", (event) => {
   event.preventDefault();
   addReview();
 });
 
-favoriteBtn.addEventListener("click", toggleFavorite);
+ratingRange.addEventListener("input", () => {
+  ratingValue.textContent = ratingRange.value;
+});
+
 resetBtn.addEventListener("click", resetForm);
 
-detailsCard.addEventListener("mouseover", () => {
-  const anime = getSelectedAnime();
-  if (!anime) return;
-  hoverStatus.textContent = `Now viewing: ${anime.title}`;
-});
-
-// Submit prevention so form never reloads the page.
-reviewForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-});
+const init = () => {
+  renderGenreOptions();
+  renderAnimeOptions();
+  animeSelect.value = String(selectedAnimeId);
+  renderAnimeGrid();
+  renderAnimeDetails();
+};
 
 init();
