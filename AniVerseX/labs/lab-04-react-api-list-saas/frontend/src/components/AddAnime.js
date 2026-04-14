@@ -1,114 +1,116 @@
 import { useState } from "react";
-import axios from "axios";
 
-function AddAnime() {
-  const [anime, setAnime] = useState({
-    title: "",
-    genre: "",
-    description: "",
-    image: "",
-    year: "",
-    rating: "",
-    review: ""
-  });
+const initialForm = {
+  title: "",
+  genre: "",
+  rating: "",
+  description: "",
+  image: ""
+};
 
-  const handleChange = (e) => {
-    setAnime({ ...anime, [e.target.name]: e.target.value });
+function AddAnime({ addAnime }) {
+  const [anime, setAnime] = useState(initialForm);
+  const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState("");
+
+  const handleChange = (event) => {
+    setAnime({ ...anime, [event.target.name]: event.target.value });
   };
 
-  const handleSubmit = async (e) => {
-  e.preventDefault();
+  const validateForm = () => {
+    const newErrors = {};
 
-  if (!anime.title || !anime.genre || !anime.year) {
-    alert("Please fill required fields!");
-    return;
-  }
+    if (!anime.title.trim()) newErrors.title = "Title is required.";
+    if (!anime.genre.trim()) newErrors.genre = "Genre is required.";
+    if (!anime.description.trim()) newErrors.description = "Description is required.";
+    if (!anime.rating) newErrors.rating = "Rating is required.";
+    if (anime.rating && (Number(anime.rating) < 1 || Number(anime.rating) > 5)) {
+      newErrors.rating = "Rating must be between 1 and 5.";
+    }
 
-  if (anime.rating < 1 || anime.rating > 5) {
-    alert("Rating must be between 1 and 5");
-    return;
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-  await axios.post("http://localhost:5000/api/anime", anime);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setMessage("");
 
-  alert("Anime added successfully!");
+    if (!validateForm()) return;
 
-  setAnime({
-    title: "",
-    genre: "",
-    description: "",
-    image: "",
-    year: "",
-    rating: "",
-    review: ""
+    addAnime({
+      title: anime.title.trim(),
+      genre: anime.genre.trim(),
+      rating: Number(anime.rating),
+      description: anime.description.trim(),
+      image: anime.image.trim() || "/images/one_punch_man.jpg"
+    });
 
-  });
-
-  window.location.reload();
-};
-    
+    setAnime(initialForm);
+    setErrors({});
+    setMessage("Anime added successfully.");
+  };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="form" onSubmit={handleSubmit} noValidate>
       <h2>Add Anime</h2>
 
+      <label htmlFor="title">Title</label>
       <input
+        id="title"
         type="text"
         name="title"
-        placeholder="Title"
+        placeholder="Eg: Jujutsu Kaisen"
         value={anime.title}
         onChange={handleChange}
       />
+      {errors.title && <p className="error">{errors.title}</p>}
 
+      <label htmlFor="genre">Genre</label>
       <input
+        id="genre"
         type="text"
         name="genre"
-        placeholder="Genre"
+        placeholder="Eg: Action"
         value={anime.genre}
         onChange={handleChange}
       />
+      {errors.genre && <p className="error">{errors.genre}</p>}
 
+      <label htmlFor="rating">Rating (1 to 5)</label>
       <input
-        type="text"
+        id="rating"
+        type="number"
+        name="rating"
+        placeholder="4.5"
+        value={anime.rating}
+        onChange={handleChange}
+      />
+      {errors.rating && <p className="error">{errors.rating}</p>}
+
+      <label htmlFor="description">Short Description</label>
+      <textarea
+        id="description"
         name="description"
-        placeholder="Description"
+        rows="3"
+        placeholder="Write a spoiler-free summary"
         value={anime.description}
         onChange={handleChange}
       />
+      {errors.description && <p className="error">{errors.description}</p>}
 
+      <label htmlFor="image">Image URL (optional)</label>
       <input
+        id="image"
         type="text"
         name="image"
-        placeholder="Image URL"
+        placeholder="https://..."
         value={anime.image}
         onChange={handleChange}
       />
 
-      <input
-        type="number"
-        name="year"
-        placeholder="Year"
-        value={anime.year}
-        onChange={handleChange}
-      />
-
-      <input
-        type="number"
-        name="rating"
-        placeholder="Rating"
-        value={anime.rating}
-        onChange={handleChange}
-
-      />
-      <input
-        type="text"
-        name="review"
-        placeholder="Review"
-        value={anime.review}
-        onChange={handleChange}
-      />
-
-      <button type="submit">Add Anime</button>
+      <button type="submit" className="btn">Add Anime</button>
+      {message && <p className="success">{message}</p>}
     </form>
   );
 }

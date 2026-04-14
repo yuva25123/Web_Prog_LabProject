@@ -58,6 +58,16 @@ body {
   letter-spacing: 0.04em;
 }
 
+.corner-meta {
+  margin-bottom: 0.6rem;
+}
+
+.project-tag {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+}
+
 h1 {
   margin: 0 0 0.75rem;
   font-size: clamp(2rem, 4vw, 3.25rem);

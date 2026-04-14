@@ -1,67 +1,177 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
-  background: #f4f4f4;
+:root {
+  --bg-1: #0c1324;
+  --bg-2: #0f1c36;
+  --panel: rgba(14, 22, 42, 0.85);
+  --border: rgba(148, 163, 184, 0.25);
+  --text: #f8fafc;
+  --muted: #cbd5e1;
+  --accent: #f97316;
+  --accent-2: #38bdf8;
+  --success: #22c55e;
+  --error: #f87171;
 }
 
-.anime-container h1 {
-  text-align: center;
+.page {
+  min-height: 100vh;
+  padding: 2.5rem 0 3rem;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(249, 115, 22, 0.18), transparent 28%),
+    linear-gradient(150deg, var(--bg-1), var(--bg-2));
+}
+
+.hero {
+  width: min(1100px, 92%);
+  margin: 0 auto 1.6rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.4rem;
+  color: var(--accent-2);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.corner-meta {
+  margin-bottom: 0.6rem;
+}
+
+.project-tag {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.hero h1 {
+  margin: 0 0 0.6rem;
+  font-size: clamp(2rem, 3.5vw, 3.2rem);
+}
+
+.hero-text {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.panel {
+  width: min(1100px, 92%);
+  margin: 0 auto 1.4rem;
+  padding: 1.5rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.35);
+}
+
+.search-bar {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.search-bar label {
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.search-bar input {
+  padding: 0.8rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: rgba(12, 18, 34, 0.85);
+  color: var(--text);
+}
+
+.form {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.form h2 {
+  margin: 0 0 0.4rem;
+}
+
+.form label {
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.form input,
+.form textarea {
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: rgba(12, 18, 34, 0.85);
+  color: var(--text);
+}
+
+.btn {
+  border: none;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  background: linear-gradient(120deg, var(--accent-2), var(--accent));
+  color: #0c1324;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(56, 189, 248, 0.25);
+}
+
+.btn.ghost {
+  background: rgba(15, 23, 42, 0.6);
+  color: var(--text);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.error {
+  margin: 0;
+  color: var(--error);
+  font-size: 0.88rem;
+}
+
+.success {
+  margin: 0.4rem 0 0;
+  color: var(--success);
+  font-weight: 600;
+}
+
+.anime-container h2 {
+  margin: 0 0 1rem;
 }
 
 .anime-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
 }
 
 .anime-card {
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  background: rgba(12, 18, 34, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 12px 22px rgba(0, 0, 0, 0.32);
 }
 
 .anime-card img {
   width: 100%;
-  height: 220px;
+  height: 190px;
   object-fit: cover;
-  border-radius: 8px;
-}
-.anime-card button {
-  display: inline-block !important;
-  background: red !important;
-  color: white !important;
-  padding: 10px 16px !important;
-  border: none !important;
-  margin-top: 15px !important;
-  font-size: 16px !important;
-  border-radius: 6px !important;
-  cursor: pointer !important;
+  border-radius: 12px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
 }
 
-.anime-card button:hover {
-  opacity: 0.9;
+.anime-card h3 {
+  margin: 0.8rem 0 0.4rem;
 }
 
-.anime-container input {
-  display: block;
-  width: 60%;
-  margin: 0 auto 20px auto;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-
-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-form input {
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+.anime-card .description {
+  color: var(--muted);
+  font-size: 0.92rem;
 }

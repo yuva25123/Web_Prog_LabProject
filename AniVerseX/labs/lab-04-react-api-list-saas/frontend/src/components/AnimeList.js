@@ -1,64 +1,26 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import SearchBar from "./SearchBar";
-
-function AnimeList() {
-  const [anime, setAnime] = useState([]);
-  const [search, setSearch] = useState("");
-
-  const fetchAnime = () => {
-    axios.get("http://localhost:5000/api/anime")
-      .then((res) => setAnime(res.data))
-      .catch((err) => console.log(err));
-  };
-
-  useEffect(() => {
-    fetchAnime();
-  }, []);
-
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://localhost:5000/api/anime/${id}`);
-      fetchAnime();
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
+function AnimeList({ anime, onDelete }) {
   return (
     <div className="anime-container">
-      <h1>AniVerseX 🎬</h1>
-
-      <SearchBar setSearch={setSearch} />
-
+      <h2>Anime List</h2>
       <div className="anime-grid">
-        {anime
-          .filter(
-            (item) =>
-              item.title.toLowerCase().includes(search.toLowerCase()) ||
-              item.genre.toLowerCase().includes(search.toLowerCase())
-          )
-          .map((item) => (
-            <div className="anime-card" key={item._id}>
-              <img
-                src={item.image}
-                alt={item.title}
-                onError={(e) => {
-                  e.target.src = "https://via.placeholder.com/200";
-                }}
-              />
-              <h2>{item.title}</h2>
-              <p><b>Genre:</b> {item.genre}</p>
-              <p><b>Year:</b> {item.year}</p>
-              <p><b>Rating:</b> ⭐ {item.rating}</p>
-              <p>{item.description}</p>
-              <p><b>Review:</b> {item.review}</p>
-
-              <button onClick={() => handleDelete(item._id)}>
-                Delete This Anime
-              </button>
-            </div>
-          ))}
+        {anime.map((item) => (
+          <article className="anime-card" key={item.id}>
+            <img
+              src={item.image}
+              alt={item.title}
+              onError={(event) => {
+                event.target.src = "/images/one_punch_man.jpg";
+              }}
+            />
+            <h3>{item.title}</h3>
+            <p><strong>Genre:</strong> {item.genre}</p>
+            <p><strong>Rating:</strong> ⭐ {item.rating}</p>
+            <p className="description">{item.description}</p>
+            <button className="btn ghost" onClick={() => onDelete(item.id)}>
+              Remove
+            </button>
+          </article>
+        ))}
       </div>
     </div>
   );
