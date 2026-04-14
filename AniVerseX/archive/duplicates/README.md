@@ -1,9 +1,6 @@
 # Archive Duplicates
 
-This folder keeps duplicate material that was removed from the active lab layout.
+This folder keeps notes about duplicate-content cleanup.
 
-Current duplicate:
-- `experiment-2-root-copy/` is the old duplicate copy of the AniVerseX static experiment.
-
-Manual decision:
-- Delete this duplicate later if you are sure the active copy under lab 3 is the only one you want to keep.
+Current status:
+- The old duplicate copy of the AniVerseX static experiment was removed after file-by-file hash comparison confirmed it matched the active lab 3 version exactly.

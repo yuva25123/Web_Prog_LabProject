@@ -45,7 +45,7 @@ AniVerseX/
 
 ## Duplicates and Confusing Files
 
-- The duplicate root `Experiment-2` copy was preserved in `AniVerseX/archive/duplicates/experiment-2-root-copy/`.
+- The duplicate root `Experiment-2` copy was removed after file-by-file hash verification confirmed it was identical to the active lab 3 copy.
 - `AniVerseX/labs/lab-05-react-api-list-saas/frontend/` contains an actual hidden `.git` folder in addition to `.gitignore`. It was left untouched and needs a manual decision.
 - `Class Test-1-YUVA _DHARSHINIC_2403917710422185/` is still at the repo root because it appears unrelated to AniVerseX and was not part of the lab mapping.
 
@@ -60,7 +60,6 @@ AniVerseX/
 
 - Confirm the React frontend still points to the expected backend URL after the folder move.
 - Decide whether the actual nested `.git` inside the React frontend should be removed or preserved.
-- Decide whether the archived duplicate `experiment-2-root-copy` is still needed.
 - Decide whether the root `Class Test-1-YUVA _DHARSHINIC_2403917710422185/` folder should be archived outside this repo.
 - Decide whether the duplicate lab 1 PDF names should be reduced to a single final submission file.
 - Review `AniVerseX/archive/root-misc/` and remove anything you no longer want to keep in the repository.
