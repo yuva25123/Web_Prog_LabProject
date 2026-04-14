@@ -6,6 +6,11 @@ AniVerseX is organized by lab module so each experiment has a clear home and the
 ## Main Structure
 
 ```text
+repo root/
+  AGENTS.md
+  README.md
+  AniVerseX/
+
 AniVerseX/
   labs/
     lab-01-client-side-form-design-and-validation/
@@ -41,13 +46,13 @@ AniVerseX/
 - Moved the Spring Boot project into lab 6.
 - Moved the Node.js backend into lab 7.
 - Moved `Lab 0 Experiment` into `AniVerseX/docs/reference/` as pre-AniVerseX reference material.
-- Moved unrelated root files into `AniVerseX/archive/root-misc/` so the repo root stays focused.
+- Moved unrelated academic material into `AniVerseX/archive/college-work/` so the repo root stays focused.
 
 ## Duplicates and Confusing Files
 
 - The duplicate root `Experiment-2` copy was removed after file-by-file hash verification confirmed it was identical to the active lab 3 copy.
-- `AniVerseX/labs/lab-05-react-api-list-saas/frontend/` contains an actual hidden `.git` folder in addition to `.gitignore`. It was left untouched and needs a manual decision.
-- `Class Test-1-YUVA _DHARSHINIC_2403917710422185/` is still at the repo root because it appears unrelated to AniVerseX and was not part of the lab mapping.
+- The old nested Git metadata folder inside lab 5 frontend was removed, so lab 5 is now a normal folder inside the main repository.
+- The leftover root `Class Test-1-YUVA _DHARSHINIC_2403917710422185/` entry was removed after its files were preserved in the archive.
 
 ## Naming Rules Used
 
@@ -59,8 +64,6 @@ AniVerseX/
 ## Manual Follow-Up
 
 - Confirm the React frontend still points to the expected backend URL after the folder move.
-- Decide whether the actual nested `.git` inside the React frontend should be removed or preserved.
-- Decide whether the root `Class Test-1-YUVA _DHARSHINIC_2403917710422185/` folder should be archived outside this repo.
 - Decide whether the duplicate lab 1 PDF names should be reduced to a single final submission file.
-- Review `AniVerseX/archive/root-misc/` and remove anything you no longer want to keep in the repository.
+- Review `AniVerseX/archive/college-work/` and remove anything you no longer want to keep in the repository.
 
