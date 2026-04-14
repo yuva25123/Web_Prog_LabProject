@@ -4,11 +4,13 @@ This folder maps to the form design and validation experiment.
 
 Current contents:
 - `app/` contains the runnable AniVerseX form validation experiment built with plain HTML, CSS, and JavaScript.
+- `get-and-post/app/` contains the AniVerseX GET and POST experiment (merged into Experiment 1).
 - `submission-files/` contains the moved PDF submission files from the old `Experiment 1` folder.
 
 Status:
 - Editable source files are now organized here.
 - Includes registration, login, and review submission forms.
+- Includes GET and POST demonstration in `get-and-post/`.
 
 Manual note:
 - `submission-files/` currently contains two similarly named PDFs, including one with a spelling mistake in the filename. That should be reviewed manually before final cleanup.
