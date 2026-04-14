@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AniVerseX Lab 4 - jQuery and Ajax</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+  <div class="bg-wave" aria-hidden="true"></div>
+
+  <header class="hero container">
+    <p class="badge">AniVerseX Lab 4</p>
+    <h1>jQuery and Ajax Showcase</h1>
+    <p class="subtitle">
+      Search, filter, and load anime data dynamically with jQuery events and Ajax.
+    </p>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Anime Explorer (jQuery Events)</h2>
+        <p>Type to search, filter by genre, and toggle details with smooth effects.</p>
+      </div>
+
+      <div class="controls">
+        <div class="control">
+          <label for="searchInput">Search by title</label>
+          <input id="searchInput" type="text" placeholder="Type a title (jQuery keyup)">
+        </div>
+        <div class="control">
+          <label for="genreFilter">Filter by genre</label>
+          <select id="genreFilter">
+            <option value="all">All Genres</option>
+          </select>
+        </div>
+        <div class="control">
+          <label>&nbsp;</label>
+          <button id="toggleTips" class="btn ghost">Show Tips</button>
+        </div>
+      </div>
+
+      <div id="tipsBox" class="tips">
+        <strong>Tips:</strong> Click a card to open details. Double-click to favorite.
+      </div>
+
+      <div id="animeGrid" class="card-grid"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Ajax Demo (Load + Submit)</h2>
+        <p>Load anime data from a local JSON file and submit a review without a page reload.</p>
+      </div>
+
+      <div class="ajax-actions">
+        <button id="loadAnimeBtn" class="btn">Load Anime via Ajax</button>
+        <button id="clearAnimeBtn" class="btn ghost">Clear List</button>
+      </div>
+
+      <div id="ajaxMessage" class="message"></div>
+      <ul id="ajaxList" class="ajax-list"></ul>
+
+      <form id="reviewForm" class="review-form">
+        <h3>Submit Review (Ajax Simulation)</h3>
+        <div class="field">
+          <label for="reviewerName">Reviewer Name</label>
+          <input id="reviewerName" type="text" placeholder="Eg: Sakura">
+        </div>
+        <div class="field">
+          <label for="reviewAnime">Anime Title</label>
+          <input id="reviewAnime" type="text" placeholder="Eg: Naruto">
+        </div>
+        <div class="field">
+          <label for="reviewText">Review</label>
+          <textarea id="reviewText" rows="3" placeholder="Write a short review"></textarea>
+        </div>
+        <button type="submit" class="btn">Send Review (Ajax)</button>
+        <p id="reviewMessage" class="message"></p>
+      </form>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

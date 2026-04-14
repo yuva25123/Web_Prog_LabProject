@@ -1,0 +1,7 @@
+[
+  { "id": 1, "title": "Attack on Titan", "genre": "Action", "year": 2013 },
+  { "id": 2, "title": "Demon Slayer", "genre": "Adventure", "year": 2019 },
+  { "id": 3, "title": "Death Note", "genre": "Thriller", "year": 2006 },
+  { "id": 4, "title": "Naruto", "genre": "Shonen", "year": 2002 },
+  { "id": 5, "title": "One Punch Man", "genre": "Comedy", "year": 2015 }
+]
