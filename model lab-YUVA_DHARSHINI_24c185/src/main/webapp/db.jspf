@@ -1,0 +1,11 @@
+<%@ page import="java.sql.*" %>
+<%!
+    String jdbcURL = "jdbc:mysql://localhost:3306/demo_db?useSSL=false&serverTimezone=UTC";
+    String jdbcUser = "root";
+    String jdbcPass = "root123";
+
+    public Connection getConnection() throws Exception {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        return DriverManager.getConnection(jdbcURL, jdbcUser, jdbcPass);
+    }
+%>
